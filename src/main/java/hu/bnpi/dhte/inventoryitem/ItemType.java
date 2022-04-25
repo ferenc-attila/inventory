@@ -1,4 +1,4 @@
-package hu.bnpi.dhte;
+package hu.bnpi.dhte.inventoryitem;
 
 public enum ItemType {
 

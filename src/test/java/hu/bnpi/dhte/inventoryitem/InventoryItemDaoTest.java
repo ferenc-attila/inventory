@@ -1,4 +1,4 @@
-package hu.bnpi.dhte;
+package hu.bnpi.dhte.inventoryitem;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

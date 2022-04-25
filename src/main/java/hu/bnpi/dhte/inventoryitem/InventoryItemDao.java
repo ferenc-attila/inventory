@@ -1,4 +1,4 @@
-package hu.bnpi.dhte;
+package hu.bnpi.dhte.inventoryitem;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;

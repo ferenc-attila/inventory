@@ -1,10 +1,10 @@
-package hu.bnpi.dhte;
+package hu.bnpi.dhte.employee;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "items")
-public class InventoryItem {
+@Table(name = "employee")
+public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,15 +12,14 @@ public class InventoryItem {
 
     private String name;
 
-    @Enumerated(value = EnumType.STRING)
-    private ItemType itemType;
+    private String email;
 
-    public InventoryItem() {
+    public Employee() {
     }
 
-    public InventoryItem(String name, ItemType itemType) {
+    public Employee(String name, String email) {
         this.name = name;
-        this.itemType = itemType;
+        this.email = email;
     }
 
     public Long getId() {
@@ -39,11 +38,11 @@ public class InventoryItem {
         this.name = name;
     }
 
-    public ItemType getItemType() {
-        return itemType;
+    public String getEmail() {
+        return email;
     }
 
-    public void setItemType(ItemType itemType) {
-        this.itemType = itemType;
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
