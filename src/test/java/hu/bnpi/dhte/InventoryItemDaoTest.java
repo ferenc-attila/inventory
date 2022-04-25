@@ -14,7 +14,7 @@ class InventoryItemDaoTest {
 
     @BeforeEach
     void setUp() {
-        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("pu");
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("pu-test");
         inventoryItemDao = new InventoryItemDao(entityManagerFactory);
     }
 
