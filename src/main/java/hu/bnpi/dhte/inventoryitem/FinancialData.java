@@ -1,6 +1,6 @@
 package hu.bnpi.dhte.inventoryitem;
 
-import javax.persistence.Embeddable;
+import jakarta.persistence.Embeddable;
 import java.time.LocalDate;
 
 @Embeddable

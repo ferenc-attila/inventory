@@ -3,8 +3,8 @@ package hu.bnpi.dhte.inventoryitem;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

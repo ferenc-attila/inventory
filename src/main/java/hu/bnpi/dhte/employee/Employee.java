@@ -1,6 +1,6 @@
 package hu.bnpi.dhte.employee;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "employee")
