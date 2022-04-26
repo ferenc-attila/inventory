@@ -15,7 +15,7 @@ jobs:
           postgresql version: 'latest'
           postgresql user: 'inventory'
           postgresql password: 'inventory'
-          postgresql init scripts: 'sql'
+          postgresql init scripts: ''
       - uses: actions/checkout@v3
       - name: Set up JDK 17
         uses: actions/setup-java@v3
