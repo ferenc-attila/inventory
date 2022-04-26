@@ -9,7 +9,6 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: 'Init postgres database'
       - uses: m4nu56/postgresql-action@1.0
         with:
           postgresql version: '14'
@@ -17,6 +16,7 @@ jobs:
           postgresql user: 'inventory'
           postgresql password: 'inventory'
           postgresql init scripts: './'
+      - name: 'Init postgres database'
         run: |
           sudo systemctl start postgresql.service
           pg_isready
