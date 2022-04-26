@@ -43,9 +43,11 @@ jobs:
     steps:
       - name: Start PostgreSQL on Ubuntu
         run: |
-          sudo service postgresql initdb --locale 'hu_HU'
           sudo systemctl start postgresql.service
           pg_isready
+      - name: Recreate postgres db with locale HU
+        run: |
+          sudo -u postgres psql initdb --locale 'hu_HU'
       - name: Create user
         run: |
           sudo -u postgres psql --command="CREATE USER inventory WITH PASSWORD 'inventory' VALID UNTIL 'infinity'"
