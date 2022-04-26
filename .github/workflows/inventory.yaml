@@ -20,3 +20,31 @@ jobs:
         with:
           name: inventory-demo
           path: target/*.jar
+
+  postgres-job:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_PORT: 5432
+          POSTGRES_USER: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Create user
+        run: |
+          sudo -u postgres psql --command="CREATE USER inventory WITH PASSWORD 'inventory' VALID UNTIL 'infinity'"
+      - name: Create database
+        run: |
+          sudo -u postgres psql --command="CREATE DATABASE inventory WITH OWNER = inventory TEMPLATE = 'template0' ENCODING = 'UTF-8' LC_COLLATE = 'hu_HU.UTF-8' LC_CTYPE = 'hu_HU.UTF-8' TABLESPACE = pg_default CONNECTION LIMIT = -1"
+          PGPASSWORD = postgres
