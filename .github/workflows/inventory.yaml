@@ -50,7 +50,7 @@ jobs:
           sudo -u postgres psql --command="CREATE USER inventory WITH PASSWORD 'inventory' VALID UNTIL 'infinity'"
       - name: Create database
         run: |
-          sudo -u postgres createdb --owner="inventory" -T template0 -E UTF-8 -l hu_HU
+          sudo -u postgres createdb --owner="inventory" -T template0 -E UTF-8 --locale="hu_HU"
 #          --command="CREATE DATABASE inventory
 #            WITH OWNER = inventory
 #            TEMPLATE = 'template0'
