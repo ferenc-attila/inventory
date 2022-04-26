@@ -29,18 +29,3 @@ jobs:
         with:
           name: inventory-demo
           path: target/*.jar
-
-#  postgres-job:
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: Start PostgreSQL on Ubuntu
-#        run: |
-#          sudo systemctl start postgresql.service
-#          pg_isready
-#      - name: Create user
-#        run: |
-#          sudo -u postgres psql --command="CREATE USER inventory WITH PASSWORD 'inventory' VALID UNTIL 'infinity'"
-#      - name: Create database
-#        run: |
-#          sudo -u postgres psql --command="CREATE DATABASE inventory WITH OWNER = inventory TEMPLATE = 'template0' ENCODING = 'UTF-8'"
