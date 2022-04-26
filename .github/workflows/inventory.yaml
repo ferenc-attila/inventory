@@ -12,19 +12,11 @@ jobs:
       - uses: m4nu56/postgresql-action@1.0
         with:
           postgresql version: 'latest'
+
           postgresql user: 'postgres'
           postgresql password: 'postgres'
           postgresql init scripts: ''
-      - name: Start PostgreSQL on Ubuntu
-        run: |
-          sudo systemctl start postgresql.service
-          pg_isready
-      - name: Create user
-        run: |
-          sudo -u postgres psql --command="CREATE USER inventory WITH PASSWORD 'inventory' VALID UNTIL 'infinity'"
-      - name: Create database
-        run: |
-          sudo -u postgres psql --command="CREATE DATABASE inventory WITH OWNER = inventory TEMPLATE = 'template0' ENCODING = 'UTF-8'"
+
       - uses: actions/checkout@v3
       - name: Set up JDK 17
         uses: actions/setup-java@v3
