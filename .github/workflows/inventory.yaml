@@ -14,7 +14,11 @@ jobs:
           postgresql version: 'latest'
           postgresql user: 'postgres'
           postgresql password: 'postgres'
-          postgresql init scripts: 'sql'
+          postgresql init scripts: ''
+      - name: Start PostgreSQL on Ubuntu
+        run: |
+          sudo systemctl start postgresql.service
+          pg_isready
       - name: Create user
         run: |
           sudo -u postgres psql --command="CREATE USER inventory WITH PASSWORD 'inventory' VALID UNTIL 'infinity'"
