@@ -43,6 +43,7 @@ jobs:
     steps:
       - name: Start PostgreSQL on Ubuntu
         run: |
+          sudo service postgresql initdb --locale 'hu_HU'
           sudo systemctl start postgresql.service
           pg_isready
       - name: Create user
