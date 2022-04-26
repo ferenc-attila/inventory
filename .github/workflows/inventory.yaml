@@ -11,8 +11,11 @@ jobs:
 
       - uses: m4nu56/postgresql-action@1.0
         with:
-          postgresql password: inventory
-          postgresql init scripts: ./
+          postgresql version: '14'
+          postgresql db: 'postgres'
+          postgresql user: 'inventory'
+          postgresql password: 'inventory'
+          postgresql init scripts: './'
       - uses: actions/checkout@v3
       - name: Set up JDK 17
         uses: actions/setup-java@v3

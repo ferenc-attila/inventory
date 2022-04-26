@@ -1,6 +1,6 @@
-CREATE USER inventory
-    WITH PASSWORD 'inventory'
-    VALID UNTIL 'infinity';
+-- CREATE USER inventory
+--     WITH PASSWORD 'inventory'
+--     VALID UNTIL 'infinity';
 
 CREATE DATABASE inventory
     WITH OWNER = inventory
