@@ -7,6 +7,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v1
+
+      - uses: m4nu56/postgresql-action@1.0
+        with:
+          postgresql password: inventory
+          postgresql init scripts: ./
       - uses: actions/checkout@v3
       - name: Set up JDK 17
         uses: actions/setup-java@v3
@@ -21,36 +27,17 @@ jobs:
           name: inventory-demo
           path: target/*.jar
 
-  postgres-job:
-    runs-on: ubuntu-latest
-
-#    services:
-#      postgres:
-#        image: postgres:latest
-#        env:
-#          POSTGRES_DB: inventory
-#          POSTGRES_PASSWORD: postgres
-#          POSTGRES_PORT: 5432
-#          POSTGRES_USER: postgres
-#        ports:
-#          - 5432:5432
-#        options: >-
-#          --health-cmd pg_isready
-#          --health-interval 10s
-#          --health-timeout 5s
-#          --health-retries 5
-
-    steps:
-      - name: Start PostgreSQL on Ubuntu
-        run: |
-          sudo systemctl start postgresql.service
-          pg_isready
-      - name: Create user
-        run: |
-          sudo -u postgres psql --command="CREATE USER inventory WITH PASSWORD 'inventory' VALID UNTIL 'infinity'"
-      - name: Create database
-        run: |
-          sudo -u postgres psql --command="CREATE DATABASE inventory WITH OWNER = inventory TEMPLATE = 'template0' ENCODING = 'UTF-8'"
-#          PGPASSWORD = postgres
-
-#createdb --owner="inventory" -T template0 -E UTF-8 --locale="hu_HU.UTF-8"
+#  postgres-job:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Start PostgreSQL on Ubuntu
+#        run: |
+#          sudo systemctl start postgresql.service
+#          pg_isready
+#      - name: Create user
+#        run: |
+#          sudo -u postgres psql --command="CREATE USER inventory WITH PASSWORD 'inventory' VALID UNTIL 'infinity'"
+#      - name: Create database
+#        run: |
+#          sudo -u postgres psql --command="CREATE DATABASE inventory WITH OWNER = inventory TEMPLATE = 'template0' ENCODING = 'UTF-8'"
