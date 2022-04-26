@@ -44,19 +44,15 @@ jobs:
       - name: Start PostgreSQL on Ubuntu
         run: |
           sudo systemctl start postgresql.service
+          sudo -u postgres initdb -l hu_HU
+          sudo systemctl restart postgresql.service
           pg_isready
       - name: Create user
         run: |
           sudo -u postgres psql --command="CREATE USER inventory WITH PASSWORD 'inventory' VALID UNTIL 'infinity'"
       - name: Create database
         run: |
-          sudo -u postgres createdb --owner="inventory" -T template0 -E UTF-8 --locale="hu_HU.UTF-8"
-#          --command="CREATE DATABASE inventory
-#            WITH OWNER = inventory
-#            TEMPLATE = 'template0'
-#            ENCODING = 'UTF-8'
-#            LC_COLLATE = 'hu_HU.UTF-8'
-#            LC_CTYPE = 'hu_HU.UTF-8'
-#            TABLESPACE = pg_default
-#            CONNECTION LIMIT = -1"
-#          PGPASSWORD = postgres
+          sudo -u postgres --command="CREATE DATABASE inventory WITH OWNER = inventory TEMPLATE = 'template0' ENCODING = 'UTF-8' LC_COLLATE = 'hu_HU.UTF-8' LC_CTYPE = 'hu_HU.UTF-8' TABLESPACE = pg_default CONNECTION LIMIT = -1"
+          PGPASSWORD = postgres
+
+#createdb --owner="inventory" -T template0 -E UTF-8 --locale="hu_HU.UTF-8"
