@@ -36,6 +36,22 @@ class InventoryItemDaoTest {
     }
 
     @Test
+    void removeInventoryItemTest() {
+        InventoryItem inventoryItem = new InventoryItem("12345", ItemType.HIGH_VALUE_ASSET, "Fényképezőgép", 1);
+        inventoryItemDao.saveInventoryItem(inventoryItem);
+
+        inventoryItemDao.removeInventoryItem(inventoryItem.getId());
+        assertThat(inventoryItemDao.listAllInventoryItems()).isEmpty();
+    }
+
+    @Test
+    void removeInventoryItemNotInDatabaseTest() {
+        IllegalArgumentException iae = assertThrows(IllegalArgumentException.class,
+                () -> inventoryItemDao.removeInventoryItem(1L));
+        assertThat(iae.getMessage()).isEqualTo("attempt to create delete event with null entity");
+    }
+
+    @Test
     void updateInventoryItemDescriptionTest() {
         InventoryItem inventoryItem = new InventoryItem("12345", ItemType.HIGH_VALUE_ASSET, "Fényképezőgép", 1);
         inventoryItemDao.saveInventoryItem(inventoryItem);
