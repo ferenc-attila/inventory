@@ -1,7 +1,9 @@
 package hu.bnpi.dhte.inventoryitem;
 
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceException;
 import org.hibernate.PropertyValueException;
+import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -61,6 +63,22 @@ class InventoryItemDaoTest {
     }
 
     @Test
+    void findInventoryItemByInventoryId() {
+        inventoryItemDao.saveInventoryItem(new InventoryItem("678901", ItemType.CONSUMABLE, "Toll", 100));
+        inventoryItemDao.saveInventoryItem(new InventoryItem("345678", ItemType.HIGH_VALUE_ASSET, "Laptop", 1));
+
+        InventoryItem item = inventoryItemDao.findInventoryItemByInventoryId("345678").get();
+        assertThat(item.getName()).isEqualTo("Laptop");
+    }
+
+    @Test
+    void findInventoryItemByInventoryIdNotInDatabase() {
+        NoResultException nre = assertThrows(NoResultException.class,
+                () -> inventoryItemDao.findInventoryItemByInventoryId("No such id").get());
+        assertThat(nre.getMessage()).isEqualTo("No result found for query");
+    }
+
+    @Test
     void listAllInventoryItems() {
             InventoryItem firstItem = new InventoryItem("678901", ItemType.CONSUMABLE, "Toll", 100);
             InventoryItem secondItem = new InventoryItem("345678", ItemType.HIGH_VALUE_ASSET, "Laptop", 1);
@@ -106,14 +124,14 @@ class InventoryItemDaoTest {
 
     @Test
     void listInventoryItemsByDescriptionSubstring() {
-        InventoryItem firstItem = new InventoryItem("678901", ItemType.HIGH_VALUE_ASSET, "Fényképezőgép", "LCD kijelzős", "ABC-123-456", 1);
-        InventoryItem secondItem = new InventoryItem("345678", ItemType.HIGH_VALUE_ASSET, "Laptop", 1);
-        InventoryItem thirdItem = new InventoryItem("123456", ItemType.HIGH_VALUE_ASSET, "Asztali számítógép", "2 LCD monitorral", "DEF-123-456", 1);
-        InventoryItem fourthItem = new InventoryItem("543210", ItemType.HIGH_VALUE_ASSET, "Mobiltelefon", "Az LCD kijelzőt védő fóliával", "GHI-123456", 1);
-        inventoryItemDao.saveInventoryItem(firstItem);
-        inventoryItemDao.saveInventoryItem(secondItem);
-        inventoryItemDao.saveInventoryItem(thirdItem);
-        inventoryItemDao.saveInventoryItem(fourthItem);
+        inventoryItemDao.saveInventoryItem(
+                new InventoryItem("678901", ItemType.HIGH_VALUE_ASSET, "Fényképezőgép", "LCD kijelzős", "ABC-123-456", 1));
+        inventoryItemDao.saveInventoryItem(
+                new InventoryItem("345678", ItemType.HIGH_VALUE_ASSET, "Laptop", 1));
+        inventoryItemDao.saveInventoryItem(
+                new InventoryItem("123456", ItemType.HIGH_VALUE_ASSET, "Asztali számítógép", "2 LCD monitorral", "DEF-123-456", 1));
+        inventoryItemDao.saveInventoryItem(
+                new InventoryItem("543210", ItemType.HIGH_VALUE_ASSET, "Mobiltelefon", "Az LCD kijelzőt védő fóliával", "GHI-123456", 1));
 
         List<InventoryItem> items = inventoryItemDao.listInventoryItemByDescriptionSubstring("LCD");
         assertThat(items).hasSize(3)
@@ -149,7 +167,21 @@ class InventoryItemDaoTest {
     }
 
     @Test
-    void notNullConstraintsWhenInventoryIdIsNullTest() {
+    void saveWhenInventoryIdNotUnique() {
+        InventoryItem firstItem = new InventoryItem("678901", ItemType.CONSUMABLE, "Toll", 100);
+        InventoryItem secondItem = new InventoryItem("345678", ItemType.HIGH_VALUE_ASSET, "Laptop", 1);
+        InventoryItem thirdItem = new InventoryItem("678901", ItemType.CONSUMABLE, "Irattartó", 50);
+        inventoryItemDao.saveInventoryItem(firstItem);
+        inventoryItemDao.saveInventoryItem(secondItem);
+
+        PersistenceException pe = assertThrows(PersistenceException.class,
+                () -> inventoryItemDao.saveInventoryItem(thirdItem));
+        assertThat(pe.getCause())
+                .isInstanceOf(ConstraintViolationException.class);
+    }
+
+    @Test
+    void saveWhenInventoryIdIsNullTest() {
         InventoryItem inventoryItem = new InventoryItem(null, ItemType.HIGH_VALUE_ASSET, "Fényképezőgép", 1);
         PersistenceException pe = assertThrows(PersistenceException.class,
                 () -> inventoryItemDao.saveInventoryItem(inventoryItem));
@@ -157,7 +189,7 @@ class InventoryItemDaoTest {
     }
 
     @Test
-    void notNullConstraintsWhenItemTypeIsNullTest() {
+    void saveWhenItemTypeIsNullTest() {
         InventoryItem inventoryItem = new InventoryItem("12345", null, "Fényképezőgép", 1);
         PersistenceException pe = assertThrows(PersistenceException.class,
                 () -> inventoryItemDao.saveInventoryItem(inventoryItem));
@@ -165,7 +197,7 @@ class InventoryItemDaoTest {
     }
 
     @Test
-    void notNullConstraintsWhenNameIsNullTest() {
+    void saveWhenNameIsNullTest() {
         InventoryItem inventoryItem = new InventoryItem("12345", ItemType.HIGH_VALUE_ASSET, null, 1);
         PersistenceException pe = assertThrows(PersistenceException.class,
                 () -> inventoryItemDao.saveInventoryItem(inventoryItem));

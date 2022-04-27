@@ -47,19 +47,33 @@ public class InventoryItemDao {
         return Optional.ofNullable(inventoryItem);
     }
 
+    public Optional<InventoryItem> findInventoryItemByInventoryId(String inventoryId) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        InventoryItem inventoryItem = entityManager.createQuery("select i from InventoryItem i where i.inventoryId = :inventoryId",
+                InventoryItem.class)
+                .setParameter("inventoryId", inventoryId)
+                .getSingleResult();
+        entityManager.close();
+        return Optional.of(inventoryItem);
+    }
+
     public List<InventoryItem> listAllInventoryItems() {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        return entityManager.createQuery("select i from InventoryItem i order by i.inventoryId",
+        List<InventoryItem> items = entityManager.createQuery("select i from InventoryItem i order by i.inventoryId",
                         InventoryItem.class)
                 .getResultList();
+        entityManager.close();
+        return items;
     }
 
     public List<InventoryItem> listInventoryItemByName(String name) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        return entityManager.createQuery("select i from InventoryItem i where i.name = :name order by i.inventoryId",
+        List<InventoryItem> items = entityManager.createQuery("select i from InventoryItem i where i.name = :name order by i.inventoryId",
                         InventoryItem.class)
                 .setParameter("name", name)
                 .getResultList();
+        entityManager.close();
+        return items;
     }
 
     public List<InventoryItem> listInventoryItemByDescriptionSubstring(String substring) {
@@ -72,9 +86,11 @@ public class InventoryItemDao {
 
     public List<InventoryItem> listInventoryItemByItemType(ItemType itemType) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        return entityManager.createQuery("select i from InventoryItem i where i.itemType = :itemType order by i.inventoryId",
+        List<InventoryItem> items = entityManager.createQuery("select i from InventoryItem i where i.itemType = :itemType order by i.inventoryId",
                         InventoryItem.class)
                 .setParameter("itemType", itemType)
                 .getResultList();
+        entityManager.close();
+        return items;
     }
 }
