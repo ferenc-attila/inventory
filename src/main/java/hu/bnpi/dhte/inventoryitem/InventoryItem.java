@@ -10,11 +10,14 @@ public class InventoryItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String itemId;
+    @Column(unique = true, nullable = false, length = 100)
+    private String inventoryId;
 
     @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false)
     private ItemType itemType;
 
+    @Column(nullable = false)
     private String name;
 
     private String description;
@@ -22,58 +25,42 @@ public class InventoryItem {
     @Column(name = "serial_number")
     private String serialNumber;
 
-    @Embedded
-    @AttributeOverride(name = "dateOfPurchase", column = @Column(name = "purchase_date"))
-    @AttributeOverride(name = "priceOfPurchase", column = @Column(name = "purchase_price"))
-    @AttributeOverride(name = "amortizedCost", column = @Column(name = "amortized_cost"))
-    private FinancialData financialData;
-
+    @Column(nullable = false)
     private int amount;
-
-    @Embedded
-    private Responsibility responsibility;
-
-    @Embedded
-    private Location location;
 
     public InventoryItem() {
     }
 
-    public InventoryItem(String name, ItemType itemType) {
-        this.name = name;
+    public InventoryItem(String inventoryId, ItemType itemType, String name, int amount) {
+        this.inventoryId = inventoryId;
         this.itemType = itemType;
+        this.name = name;
+        this.amount = amount;
+    }
+
+    public InventoryItem(String inventoryId, ItemType itemType, String name, String description, String serialNumber, int amount) {
+        this.inventoryId = inventoryId;
+        this.itemType = itemType;
+        this.name = name;
+        this.description = description;
+        this.serialNumber = serialNumber;
+        this.amount = amount;
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public String getInventoryId() {
+        return inventoryId;
     }
 
     public ItemType getItemType() {
         return itemType;
     }
 
-    public void setItemType(ItemType itemType) {
-        this.itemType = itemType;
-    }
-
-    public String getItemId() {
-        return itemId;
-    }
-
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
+    public String getName() {
+        return name;
     }
 
     public String getDescription() {
@@ -92,35 +79,7 @@ public class InventoryItem {
         this.serialNumber = serialNumber;
     }
 
-    public FinancialData getFinancialData() {
-        return financialData;
-    }
-
-    public void setFinancialData(FinancialData financialData) {
-        this.financialData = financialData;
-    }
-
     public int getAmount() {
         return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
-
-    public Responsibility getResponsibility() {
-        return responsibility;
-    }
-
-    public void setResponsibility(Responsibility responsibility) {
-        this.responsibility = responsibility;
-    }
-
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
     }
 }
