@@ -2,6 +2,7 @@ package hu.bnpi.dhte.inventoryitem;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.NoResultException;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,51 +15,57 @@ public class InventoryItemDao {
         this.entityManagerFactory = entityManagerFactory;
     }
 
-    public void saveInventoryItem(InventoryItem inventoryItem) {
+    public boolean isInventoryIdExists(String inventoryId) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
+        Long count = entityManager.createQuery("select count(i) from InventoryItem i where i.inventoryId =:inventoryId",
+                Long.class)
+                .setParameter("inventoryId", inventoryId)
+                .getSingleResult();
+        return !count.equals(0L);
+    }
+
+    public Optional<InventoryItem> saveInventoryItem(InventoryItem inventoryItem) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        Optional<InventoryItem> result;
         try {
             entityManager.getTransaction().begin();
             entityManager.persist(inventoryItem);
+            result = Optional.of(inventoryItem);
             entityManager.getTransaction().commit();
         } finally {
             entityManager.close();
         }
+        return result;
     }
 
-    public void updateInventoryItemDescription(long id, String description) {
+    public Optional<InventoryItem> updateInventoryItem(long id, String value, UpdateStringAttribute updateStringAttribute) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
+        Optional<InventoryItem> result;
         try {
             entityManager.getTransaction().begin();
-            InventoryItem inventoryItem = entityManager.getReference(InventoryItem.class, id);
-            inventoryItem.setDescription(description);
+            InventoryItem inventoryItem = entityManager.find(InventoryItem.class, id);
+            updateStringAttribute.updateStringAttribute(inventoryItem, value);
             entityManager.getTransaction().commit();
+            result = Optional.of(inventoryItem);
         } finally {
             entityManager.close();
         }
+        return result;
     }
 
-    public void updateInventoryItemSerialNumber(long id, String serialNumber) {
+    public boolean removeInventoryItem(long id) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        try {
-            entityManager.getTransaction().begin();
-            InventoryItem inventoryItem = entityManager.getReference(InventoryItem.class, id);
-            inventoryItem.setSerialNumber(serialNumber);
-            entityManager.getTransaction().commit();
-        } finally {
-            entityManager.close();
-        }
-    }
-
-    public void removeInventoryItem(long id) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        boolean success = false;
         try {
             entityManager.getTransaction().begin();
             InventoryItem inventoryItem = entityManager.find(InventoryItem.class, id);
             entityManager.remove(inventoryItem);
             entityManager.getTransaction().commit();
+            success = true;
         } finally {
             entityManager.close();
         }
+        return success;
     }
 
     public Optional<InventoryItem> findInventoryItemById(long id) {
@@ -73,10 +80,12 @@ public class InventoryItemDao {
     public Optional<InventoryItem> findInventoryItemByInventoryId(String inventoryId) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
-            return Optional.ofNullable(entityManager.createQuery("select i from InventoryItem i where i.inventoryId = :inventoryId",
+            return Optional.of(entityManager.createQuery("select i from InventoryItem i where i.inventoryId = :inventoryId",
                             InventoryItem.class)
                     .setParameter("inventoryId", inventoryId)
                     .getSingleResult());
+        } catch (NoResultException nre) {
+            return Optional.empty();
         } finally {
             entityManager.close();
         }

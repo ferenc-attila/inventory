@@ -1,6 +1,5 @@
 package hu.bnpi.dhte.inventoryitem;
 
-import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceException;
 import org.hibernate.PropertyValueException;
 import org.hibernate.exception.ConstraintViolationException;
@@ -11,7 +10,6 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -52,30 +50,19 @@ class InventoryItemDaoTest {
     }
 
     @Test
-    void updateInventoryItemDescriptionTest() {
+    void updateInventoryItemTest() {
         InventoryItem inventoryItem = new InventoryItem("12345", ItemType.HIGH_VALUE_ASSET, "Fényképezőgép", 1);
         inventoryItemDao.saveInventoryItem(inventoryItem);
+        UpdateStringAttribute updateSerialNumber = InventoryItem::setSerialNumber;
 
-        inventoryItemDao.updateInventoryItemDescription(inventoryItem.getId(), "tükörreflexes");
-        InventoryItem anotherItem = inventoryItemDao.findInventoryItemById(inventoryItem.getId()).get();
-        assertThat(anotherItem.getDescription()).isEqualTo("tükörreflexes");
-    }
-
-    @Test
-    void updateInventoryItemSerialNumberTest() {
-        InventoryItem inventoryItem = new InventoryItem("12345", ItemType.HIGH_VALUE_ASSET, "Fényképezőgép", 1);
-        inventoryItemDao.saveInventoryItem(inventoryItem);
-
-        inventoryItemDao.updateInventoryItemSerialNumber(inventoryItem.getId(), "ABC-123-456");
+        inventoryItemDao.updateInventoryItem(inventoryItem.getId(), "ABC-123-456", updateSerialNumber);
         InventoryItem anotherItem = inventoryItemDao.findInventoryItemById(inventoryItem.getId()).get();
         assertThat(anotherItem.getSerialNumber()).isEqualTo("ABC-123-456");
     }
 
     @Test
     void findInventoryItemByIdNotInDatabase() {
-        NoSuchElementException nse = assertThrows(NoSuchElementException.class,
-                () -> inventoryItemDao.findInventoryItemById(1).get());
-        assertThat(nse.getMessage()).isEqualTo("No value present");
+        assertThat(inventoryItemDao.findInventoryItemById(1L)).isEmpty();
     }
 
     @Test
@@ -89,9 +76,7 @@ class InventoryItemDaoTest {
 
     @Test
     void findInventoryItemByInventoryIdNotInDatabase() {
-        NoResultException nre = assertThrows(NoResultException.class,
-                () -> inventoryItemDao.findInventoryItemByInventoryId("No such id").get());
-        assertThat(nre.getMessage()).isEqualTo("No result found for query");
+        assertThat(inventoryItemDao.findInventoryItemByInventoryId("123456")).isEmpty();
     }
 
     @Test
@@ -113,6 +98,9 @@ class InventoryItemDaoTest {
 
     @Test
     void listInventoryItemsWhenTableIsEmpty() {
+        InventoryItem firstItem = new InventoryItem("678901", ItemType.CONSUMABLE, "Toll", 100);
+        inventoryItemDao.saveInventoryItem(firstItem);
+        inventoryItemDao.removeInventoryItem(firstItem.getId());
         assertThat(inventoryItemDao.listAllInventoryItems()).isEmpty();
     }
 
@@ -135,6 +123,17 @@ class InventoryItemDaoTest {
 
     @Test
     void listInventoryItemByNameNotInDatabase() {
+        InventoryItem firstItem = new InventoryItem("678900", ItemType.CONSUMABLE, "Toll", 100);
+        InventoryItem fifthItem = new InventoryItem("678901", ItemType.HIGH_VALUE_ASSET, "Fényképezőgép", 1);
+        InventoryItem secondItem = new InventoryItem("345678", ItemType.HIGH_VALUE_ASSET, "Laptop", 1);
+        InventoryItem thirdItem = new InventoryItem("123456", ItemType.HIGH_VALUE_ASSET, "Fényképezőgép", 1);
+        InventoryItem fourthItem = new InventoryItem("543210", ItemType.HIGH_VALUE_ASSET, "Fényképezőgép", 1);
+        inventoryItemDao.saveInventoryItem(firstItem);
+        inventoryItemDao.saveInventoryItem(secondItem);
+        inventoryItemDao.saveInventoryItem(thirdItem);
+        inventoryItemDao.saveInventoryItem(fourthItem);
+        inventoryItemDao.saveInventoryItem(fifthItem);
+
         assertThat(inventoryItemDao.listInventoryItemByName("nothing")).isEmpty();
     }
 
@@ -157,6 +156,16 @@ class InventoryItemDaoTest {
 
     @Test
     void listInventoryItemsByDescriptionSubstringNotInDatabase() {
+        InventoryItem firstItem = new InventoryItem("678900", ItemType.CONSUMABLE, "Toll", 100);
+        InventoryItem fifthItem = new InventoryItem("678901", ItemType.HIGH_VALUE_ASSET, "Fényképezőgép", 1);
+        InventoryItem secondItem = new InventoryItem("345678", ItemType.HIGH_VALUE_ASSET, "Laptop", 1);
+        InventoryItem thirdItem = new InventoryItem("123456", ItemType.HIGH_VALUE_ASSET, "Fényképezőgép", 1);
+        InventoryItem fourthItem = new InventoryItem("543210", ItemType.HIGH_VALUE_ASSET, "Fényképezőgép", 1);
+        inventoryItemDao.saveInventoryItem(firstItem);
+        inventoryItemDao.saveInventoryItem(secondItem);
+        inventoryItemDao.saveInventoryItem(thirdItem);
+        inventoryItemDao.saveInventoryItem(fourthItem);
+        inventoryItemDao.saveInventoryItem(fifthItem);
         assertThat(inventoryItemDao.listInventoryItemByDescriptionSubstring("nothing")).isEmpty();
     }
 
@@ -179,6 +188,16 @@ class InventoryItemDaoTest {
 
     @Test
     void listItemsByNoSuchItemTypeTest() {
+        InventoryItem firstItem = new InventoryItem("678900", ItemType.CONSUMABLE, "Toll", 100);
+        InventoryItem fifthItem = new InventoryItem("678901", ItemType.CONSUMABLE, "Fényképezőgép", 1);
+        InventoryItem secondItem = new InventoryItem("345678", ItemType.LOW_VALUE_ASSET, "Laptop", 1);
+        InventoryItem thirdItem = new InventoryItem("123456", ItemType.LOW_VALUE_ASSET, "Fényképezőgép", 1);
+        InventoryItem fourthItem = new InventoryItem("543210", ItemType.CONSUMABLE, "Fényképezőgép", 1);
+        inventoryItemDao.saveInventoryItem(firstItem);
+        inventoryItemDao.saveInventoryItem(secondItem);
+        inventoryItemDao.saveInventoryItem(thirdItem);
+        inventoryItemDao.saveInventoryItem(fourthItem);
+        inventoryItemDao.saveInventoryItem(fifthItem);
         assertThat(inventoryItemDao.listInventoryItemByItemType(ItemType.HIGH_VALUE_ASSET)).isEmpty();
     }
 
