@@ -131,17 +131,17 @@ class InventoryItemServiceTest {
 //    }
 
     @Test()
-    @Disabled
     void updateInventoryItemSerialNumberTest() {
         InventoryItem item = new InventoryItem("678901", ItemType.HIGH_VALUE_ASSET, "Laptop", 1);
         item.setId(1L);
+        UpdateStringAttribute update = InventoryItem::setSerialNumber;
         when(inventoryItemDao.findInventoryItemByInventoryId("678901"))
                 .thenReturn(Optional.of(item));
-        when(inventoryItemDao.updateInventoryItem(1, "Some serial number", any(UpdateStringAttribute.class)))
+        lenient().when(inventoryItemDao.updateInventoryItem(anyLong(), anyString(), any()))
                 .thenReturn(Optional.of(item));
         assertThat(inventoryItemService.updateInventoryItemSerialNumber("678901", "Some serial number"))
-                .isEqualTo("Inventory item updated successfully with inventory id: 678901");
-        verify(inventoryItemDao).updateInventoryItem(1, "Some serial number", any(UpdateStringAttribute.class));
+                .isEqualTo("Serial number of inventory item 678901 updated successfully with 'Some serial number'!");
+        verify(inventoryItemDao).updateInventoryItem(anyLong(), anyString(), any());
     }
 
 //    @Test

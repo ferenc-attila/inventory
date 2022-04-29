@@ -2,7 +2,6 @@ package hu.bnpi.dhte.inventoryitem;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.NoResultException;
 
 import java.util.List;
 import java.util.Optional;
@@ -77,18 +76,31 @@ public class InventoryItemDao {
         }
     }
 
+//    public Optional<InventoryItem> findInventoryItemByInventoryId(String inventoryId) {
+//        EntityManager entityManager = entityManagerFactory.createEntityManager();
+//        try {
+//            return Optional.of(entityManager.createQuery("select i from InventoryItem i where i.inventoryId = :inventoryId",
+//                            InventoryItem.class)
+//                    .setParameter("inventoryId", inventoryId)
+//                    .getSingleResult()
+//            );
+//        } catch (NoResultException nre) {
+//            return Optional.empty();
+//        } finally {
+//            entityManager.close();
+//        }
+//    }
+
     public Optional<InventoryItem> findInventoryItemByInventoryId(String inventoryId) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        try {
-            return Optional.of(entityManager.createQuery("select i from InventoryItem i where i.inventoryId = :inventoryId",
-                            InventoryItem.class)
-                    .setParameter("inventoryId", inventoryId)
-                    .getSingleResult());
-        } catch (NoResultException nre) {
-            return Optional.empty();
-        } finally {
-            entityManager.close();
-        }
+        Optional<InventoryItem> result = entityManager.createQuery("select i from InventoryItem i where i.inventoryId = :inventoryId",
+                        InventoryItem.class)
+                .setParameter("inventoryId", inventoryId)
+                .getResultList()
+                .stream()
+                .findFirst();
+        entityManager.close();
+        return result;
     }
 
     public List<InventoryItem> listAllInventoryItems() {
