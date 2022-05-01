@@ -14,15 +14,6 @@ public class InventoryItemDao {
         this.entityManagerFactory = entityManagerFactory;
     }
 
-    public boolean isInventoryIdExists(String inventoryId) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        Long count = entityManager.createQuery("select count(i) from InventoryItem i where i.inventoryId =:inventoryId",
-                Long.class)
-                .setParameter("inventoryId", inventoryId)
-                .getSingleResult();
-        return !count.equals(0L);
-    }
-
     public Optional<InventoryItem> saveInventoryItem(InventoryItem inventoryItem) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         Optional<InventoryItem> result;
@@ -52,19 +43,16 @@ public class InventoryItemDao {
         return result;
     }
 
-    public boolean removeInventoryItem(long id) {
+    public void removeInventoryItem(long id) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        boolean success = false;
         try {
             entityManager.getTransaction().begin();
             InventoryItem inventoryItem = entityManager.find(InventoryItem.class, id);
             entityManager.remove(inventoryItem);
             entityManager.getTransaction().commit();
-            success = true;
         } finally {
             entityManager.close();
         }
-        return success;
     }
 
     public Optional<InventoryItem> findInventoryItemById(long id) {
@@ -75,21 +63,6 @@ public class InventoryItemDao {
             entityManager.close();
         }
     }
-
-//    public Optional<InventoryItem> findInventoryItemByInventoryId(String inventoryId) {
-//        EntityManager entityManager = entityManagerFactory.createEntityManager();
-//        try {
-//            return Optional.of(entityManager.createQuery("select i from InventoryItem i where i.inventoryId = :inventoryId",
-//                            InventoryItem.class)
-//                    .setParameter("inventoryId", inventoryId)
-//                    .getSingleResult()
-//            );
-//        } catch (NoResultException nre) {
-//            return Optional.empty();
-//        } finally {
-//            entityManager.close();
-//        }
-//    }
 
     public Optional<InventoryItem> findInventoryItemByInventoryId(String inventoryId) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();

@@ -1,6 +1,5 @@
 package hu.bnpi.dhte.inventoryitem;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -31,7 +30,20 @@ class InventoryItemServiceTest {
     public static Stream<Arguments> createInvalidStringsAndExceptionMessagesForItemTypeSearch() {
         return Stream.of(
                 arguments("HIGH_VALUE-ASSET", "Invalid type of item: HIGH_VALUE-ASSET"),
-                arguments("consumables", "Invalid type of item: CONSUMABLES")
+                arguments("consumables", "Invalid type of item: CONSUMABLES"),
+                arguments(null, "Input parameters cannot be null or empty!"),
+                arguments("   \n", "Input parameters cannot be null or empty!")
+        );
+    }
+
+    public static Stream<Arguments> createCombinationsForNullAndEmptyInventoryIdAndStringValuesForUpdate() {
+        return Stream.of(
+                arguments(null, "a string"),
+                arguments("    \n", "a string"),
+                arguments("an inventory id", null),
+                arguments("an inventory id", "    \n"),
+                arguments(null, null),
+                arguments("    \n","    \n")
         );
     }
 
@@ -77,58 +89,37 @@ class InventoryItemServiceTest {
         verify(inventoryItemDao, never()).removeInventoryItem(anyLong());
     }
 
-//    @Test
-//    void updateInventoryItemDescriptionTest() {
-//        InventoryItem result = new InventoryItem("678901", ItemType.CONSUMABLE, "Toll", 100);
-//        result.setId(1L);
-//        when(inventoryItemDao.findInventoryItemByInventoryId("678901"))
-//                .thenReturn(Optional.of(result));
-//        inventoryItemService.updateInventoryItemDescription("678901", "Some description");
-//        verify(inventoryItemDao).findInventoryItemByInventoryId("678901");
-//        verify(inventoryItemDao).updateInventoryItemDescription(1, "Some description");
-//    }
-//
-//    @Test
-//    void updateInventoryItemDescriptionWhenItemNotInDatabaseTest() {
-//        when(inventoryItemDao.findInventoryItemByInventoryId("678901"))
-//                .thenReturn(Optional.empty());
-//        IllegalArgumentException iae = assertThrows(IllegalArgumentException.class,
-//                () -> inventoryItemService.updateInventoryItemDescription("678901", "Some description"));
-//        assertThat(iae.getMessage()).isEqualTo("Item not found with inventory id: 678901");
-//        verify(inventoryItemDao, never()).updateInventoryItemDescription(anyLong(), anyString());
-//    }
-//
-//    @Test
-//    void updateInventoryItemDescriptionWithNullId() {
-//        IllegalArgumentException iae = assertThrows(IllegalArgumentException.class,
-//                () -> inventoryItemService.updateInventoryItemDescription(null, "Some description"));
-//        assertThat(iae.getMessage()).isEqualTo("Input string cannot be null or empty");
-//        verify(inventoryItemDao, never()).updateInventoryItemDescription(anyLong(), anyString());
-//    }
-//
-//    @Test
-//    void updateInventoryItemDescriptionWithNullDescription() {
-//        InventoryItem result = new InventoryItem("678901", ItemType.CONSUMABLE, "Toll", 100);
-//        result.setId(1L);
-//        when(inventoryItemDao.findInventoryItemByInventoryId("678901"))
-//                .thenReturn(Optional.of(result));
-//        IllegalArgumentException iae = assertThrows(IllegalArgumentException.class,
-//                () -> inventoryItemService.updateInventoryItemDescription("678901", null));
-//        assertThat(iae.getMessage()).isEqualTo("Input string cannot be null or empty");
-//        verify(inventoryItemDao, never()).updateInventoryItemDescription(anyLong(), anyString());
-//    }
-//
-//    @Test
-//    void updateInventoryItemDescriptionWithEmptyDescription() {
-//        InventoryItem result = new InventoryItem("678901", ItemType.CONSUMABLE, "Toll", 100);
-//        result.setId(1L);
-//        when(inventoryItemDao.findInventoryItemByInventoryId("678901"))
-//                .thenReturn(Optional.of(result));
-//        IllegalArgumentException iae = assertThrows(IllegalArgumentException.class,
-//                () -> inventoryItemService.updateInventoryItemDescription("678901", "    "));
-//        assertThat(iae.getMessage()).isEqualTo("Input string cannot be null or empty");
-//        verify(inventoryItemDao, never()).updateInventoryItemDescription(anyLong(), anyString());
-//    }
+    @Test
+    void updateInventoryItemDescriptionTest() {
+        InventoryItem item = new InventoryItem("678901", ItemType.HIGH_VALUE_ASSET, "Laptop", 1);
+        item.setId(1L);
+        UpdateStringAttribute update = InventoryItem::setDescription;
+        when(inventoryItemDao.findInventoryItemByInventoryId("678901"))
+                .thenReturn(Optional.of(item));
+        when(inventoryItemDao.updateInventoryItem(eq(1L), eq("A description"), any(UpdateStringAttribute.class)))
+                .thenReturn(Optional.of(item));
+        assertThat(inventoryItemService.updateInventoryItemDescription("678901", "A description"))
+                .isEqualTo("Description of inventory item 678901 updated successfully with 'A description'!");
+        verify(inventoryItemDao).updateInventoryItem(eq(1L), eq("A description"), any(UpdateStringAttribute.class));
+    }
+
+    @Test
+    void updateInventoryItemDescriptionWhenItemNotInDatabaseTest() {
+        when(inventoryItemDao.findInventoryItemByInventoryId("678901"))
+                .thenReturn(Optional.empty());
+        assertThat(inventoryItemService.updateInventoryItemDescription("678901", "A description"))
+                .isEqualTo("Item not found with inventory id: 678901");
+        verify(inventoryItemDao, never()).updateInventoryItem(anyLong(), anyString(), any());
+    }
+
+    @ParameterizedTest(name = "Test update description with combinations of null and empty parameters")
+    @MethodSource("createCombinationsForNullAndEmptyInventoryIdAndStringValuesForUpdate")
+    void updateInventoryItemDescriptionWithNullOrEmptyValues(String inventoryId, String description) {
+        assertThat(inventoryItemService.updateInventoryItemDescription(inventoryId, description))
+                .isEqualTo("Input parameters cannot be null or empty!");
+        verify(inventoryItemDao, never()).findInventoryItemByInventoryId(any());
+        verify(inventoryItemDao, never()).updateInventoryItem(anyLong(), anyString(), any());
+    }
 
     @Test()
     void updateInventoryItemSerialNumberTest() {
@@ -137,54 +128,30 @@ class InventoryItemServiceTest {
         UpdateStringAttribute update = InventoryItem::setSerialNumber;
         when(inventoryItemDao.findInventoryItemByInventoryId("678901"))
                 .thenReturn(Optional.of(item));
-        when(inventoryItemDao.updateInventoryItem(eq(1L), eq("Some serial number"), any(UpdateStringAttribute.class)))
+        when(inventoryItemDao.updateInventoryItem(eq(1L), eq("A serial number"), any(UpdateStringAttribute.class)))
                 .thenReturn(Optional.of(item));
-        assertThat(inventoryItemService.updateInventoryItemSerialNumber("678901", "Some serial number"))
-                .isEqualTo("Serial number of inventory item 678901 updated successfully with 'Some serial number'!");
-        verify(inventoryItemDao).updateInventoryItem(eq(1L), eq("Some serial number"), any(UpdateStringAttribute.class));
+        assertThat(inventoryItemService.updateInventoryItemSerialNumber("678901", "A serial number"))
+                .isEqualTo("Serial number of inventory item 678901 updated successfully with 'A serial number'!");
+        verify(inventoryItemDao).updateInventoryItem(eq(1L), eq("A serial number"), any(UpdateStringAttribute.class));
     }
 
-//    @Test
-//    void updateInventoryItemSerialNumberWhenItemNotInDatabaseTest() {
-//        when(inventoryItemDao.findInventoryItemByInventoryId("678901"))
-//                .thenReturn(Optional.empty());
-//        IllegalArgumentException iae = assertThrows(IllegalArgumentException.class,
-//                () -> inventoryItemService.updateInventoryItemSerialNumber("678901", "Some serial number"));
-//        assertThat(iae.getMessage()).isEqualTo("Item not found with inventory id: 678901");
-//        verify(inventoryItemDao, never()).updateInventoryItemSerialNumber(anyLong(), anyString());
-//    }
-//
-//    @Test
-//    void updateInventoryItemSerialNumberWithNullId() {
-//        IllegalArgumentException iae = assertThrows(IllegalArgumentException.class,
-//                () -> inventoryItemService.updateInventoryItemSerialNumber(null, "Some description"));
-//        assertThat(iae.getMessage()).isEqualTo("Input string cannot be null or empty");
-//        verify(inventoryItemDao, never()).updateInventoryItemSerialNumber(anyLong(), anyString());
-//    }
-//
-//    @Test
-//    void updateInventoryItemSerialNumberWithNullDescription() {
-//        InventoryItem result = new InventoryItem("678901", ItemType.CONSUMABLE, "Toll", 100);
-//        result.setId(1L);
-//        when(inventoryItemDao.findInventoryItemByInventoryId("678901"))
-//                .thenReturn(Optional.of(result));
-//        IllegalArgumentException iae = assertThrows(IllegalArgumentException.class,
-//                () -> inventoryItemService.updateInventoryItemSerialNumber("678901", null));
-//        assertThat(iae.getMessage()).isEqualTo("Input string cannot be null or empty");
-//        verify(inventoryItemDao, never()).updateInventoryItemSerialNumber(anyLong(), anyString());
-//    }
-//
-//    @Test
-//    void updateInventoryItemSerialNumberWithEmptyDescription() {
-//        InventoryItem result = new InventoryItem("678901", ItemType.CONSUMABLE, "Toll", 100);
-//        result.setId(1L);
-//        when(inventoryItemDao.findInventoryItemByInventoryId("678901"))
-//                .thenReturn(Optional.of(result));
-//        IllegalArgumentException iae = assertThrows(IllegalArgumentException.class,
-//                () -> inventoryItemService.updateInventoryItemSerialNumber("678901", "    "));
-//        assertThat(iae.getMessage()).isEqualTo("Input string cannot be null or empty");
-//        verify(inventoryItemDao, never()).updateInventoryItemSerialNumber(anyLong(), anyString());
-//    }
+    @Test
+    void updateInventoryItemSerialNumberWhenItemNotInDatabaseTest() {
+        when(inventoryItemDao.findInventoryItemByInventoryId("678901"))
+                .thenReturn(Optional.empty());
+        assertThat(inventoryItemService.updateInventoryItemSerialNumber("678901", "A serial number"))
+                .isEqualTo("Item not found with inventory id: 678901");
+        verify(inventoryItemDao, never()).updateInventoryItem(anyLong(), anyString(), any());
+    }
+
+    @ParameterizedTest(name = "Test update serial number with combinations of null and empty parameters")
+    @MethodSource("createCombinationsForNullAndEmptyInventoryIdAndStringValuesForUpdate")
+    void updateInventoryItemSerialNumberWithNullOrEmptyValues(String inventoryId, String serialNumber) {
+        assertThat(inventoryItemService.updateInventoryItemSerialNumber(inventoryId, serialNumber))
+                .isEqualTo("Input parameters cannot be null or empty!");
+        verify(inventoryItemDao, never()).findInventoryItemByInventoryId(any());
+        verify(inventoryItemDao, never()).updateInventoryItem(anyLong(), anyString(), any());
+    }
 
     @Test
     void findInventoryItemByInventoryIdTest() {

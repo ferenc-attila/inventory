@@ -88,8 +88,8 @@ public class InventoryItemService {
     }
 
     public List<InventoryItem> listInventoryItemsByItemType(String itemType) {
-        createItemTypeByString(itemType);
-        return inventoryItemDao.listInventoryItemByItemType(createItemTypeByString(itemType));
+        ItemType type = createItemTypeByString(itemType);
+        return inventoryItemDao.listInventoryItemByItemType(type);
     }
 
     private ItemType createItemTypeByString(String itemType) {
