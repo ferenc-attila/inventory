@@ -137,11 +137,11 @@ class InventoryItemServiceTest {
         UpdateStringAttribute update = InventoryItem::setSerialNumber;
         when(inventoryItemDao.findInventoryItemByInventoryId("678901"))
                 .thenReturn(Optional.of(item));
-        lenient().when(inventoryItemDao.updateInventoryItem(anyLong(), anyString(), any()))
+        when(inventoryItemDao.updateInventoryItem(eq(1L), eq("Some serial number"), any(UpdateStringAttribute.class)))
                 .thenReturn(Optional.of(item));
         assertThat(inventoryItemService.updateInventoryItemSerialNumber("678901", "Some serial number"))
                 .isEqualTo("Serial number of inventory item 678901 updated successfully with 'Some serial number'!");
-        verify(inventoryItemDao).updateInventoryItem(anyLong(), anyString(), any());
+        verify(inventoryItemDao).updateInventoryItem(eq(1L), eq("Some serial number"), any(UpdateStringAttribute.class));
     }
 
 //    @Test
