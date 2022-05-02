@@ -1,11 +1,14 @@
 package hu.bnpi.dhte.inventory.responsibility;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Employee extends Responsible {
 
-    @OneToOne
+    @OneToOne(mappedBy = "leader")
+    @JoinColumn(name = "leader_id")
     private Department departmentResponsibleFor;
 
     public Employee() {
