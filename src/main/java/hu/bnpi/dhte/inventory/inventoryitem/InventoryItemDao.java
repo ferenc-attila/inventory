@@ -1,4 +1,4 @@
-package hu.bnpi.dhte.inventoryitem;
+package hu.bnpi.dhte.inventory.inventoryitem;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public class InventoryItemDao {
 
-    private EntityManagerFactory entityManagerFactory;
+    private final EntityManagerFactory entityManagerFactory;
 
     public InventoryItemDao(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;

@@ -1,5 +1,9 @@
 package hu.bnpi.dhte.inventoryitem;
 
+import hu.bnpi.dhte.inventory.inventoryitem.InventoryItem;
+import hu.bnpi.dhte.inventory.inventoryitem.InventoryItemDao;
+import hu.bnpi.dhte.inventory.inventoryitem.ItemType;
+import hu.bnpi.dhte.inventory.inventoryitem.UpdateStringAttribute;
 import jakarta.persistence.PersistenceException;
 import org.hibernate.PropertyValueException;
 import org.hibernate.exception.ConstraintViolationException;

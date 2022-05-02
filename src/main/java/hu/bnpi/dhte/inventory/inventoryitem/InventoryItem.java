@@ -1,5 +1,6 @@
-package hu.bnpi.dhte.inventoryitem;
+package hu.bnpi.dhte.inventory.inventoryitem;
 
+import hu.bnpi.dhte.inventory.responsibility.Responsible;
 import jakarta.persistence.*;
 
 @Entity
@@ -27,6 +28,10 @@ public class InventoryItem {
 
     @Column(nullable = false)
     private int amount;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "responsible_id")
+    private Responsible responsible;
 
     public InventoryItem() {
     }
@@ -85,5 +90,13 @@ public class InventoryItem {
 
     public int getAmount() {
         return amount;
+    }
+
+    public Responsible getResponsible() {
+        return responsible;
+    }
+
+    public void setResponsible(Responsible responsible) {
+        this.responsible = responsible;
     }
 }

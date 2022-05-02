@@ -1,5 +1,6 @@
 package hu.bnpi.dhte.inventoryitem;
 
+import hu.bnpi.dhte.inventory.inventoryitem.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;

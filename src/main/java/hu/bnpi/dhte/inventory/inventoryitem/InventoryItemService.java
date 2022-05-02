@@ -1,4 +1,4 @@
-package hu.bnpi.dhte.inventoryitem;
+package hu.bnpi.dhte.inventory.inventoryitem;
 
 import java.util.Arrays;
 import java.util.List;
@@ -10,7 +10,7 @@ public class InventoryItemService {
     private static final String ITEM_NOT_FOUND_MESSAGE = "Item not found with inventory id: ";
     private static final String NOT_NULL_OR_EMPTY_MESSAGE = "Input parameters cannot be null or empty!";
 
-    private InventoryItemDao inventoryItemDao;
+    private final InventoryItemDao inventoryItemDao;
 
     public InventoryItemService(InventoryItemDao inventoryItemDao) {
         this.inventoryItemDao = inventoryItemDao;

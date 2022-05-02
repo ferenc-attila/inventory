@@ -1,5 +1,7 @@
 package hu.bnpi.dhte.inventoryitem;
 
+import hu.bnpi.dhte.inventory.inventoryitem.InventoryItem;
+import hu.bnpi.dhte.inventory.inventoryitem.ItemType;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
