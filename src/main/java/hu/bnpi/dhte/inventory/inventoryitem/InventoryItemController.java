@@ -19,11 +19,7 @@ public class InventoryItemController {
     }
 
     public String removeInventoryItem(String inventoryId) {
-        try {
             return inventoryItemService.removeInventoryItem(inventoryId);
-        } catch (IllegalArgumentException iae) {
-            return iae.getMessage();
-        }
     }
 
     public String updateInventoryItemDescription(String inventoryId, String description) {
