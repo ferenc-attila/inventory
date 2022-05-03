@@ -14,14 +14,12 @@ public class Employee extends Responsible {
     public Employee() {
     }
 
-    public Employee(String name, Department departmentResponsibleFor) {
+    public Employee(String name) {
         super(name);
-        this.departmentResponsibleFor = departmentResponsibleFor;
     }
 
-    public Employee(Long id, String name, Department departmentResponsibleFor) {
+    public Employee(Long id, String name) {
         super(id, name);
-        this.departmentResponsibleFor = departmentResponsibleFor;
     }
 
     public Department getDepartmentResponsibleFor() {
