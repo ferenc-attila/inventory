@@ -24,17 +24,17 @@ class ResponsibleDaoTest {
 
     @Test
     void saveAndFindEmployeeTest() {
-        Employee employee = new Employee("John Smith");
+        Employee employee = new Employee("John Smith", "johnsmith@mail.com");
         responsibleDao.saveEmployee(employee);
 
         Optional<Employee> result = responsibleDao.findEmployeeById(employee.getId());
 
-        assertThat(result.get().getName()).isEqualTo("John Smith");
+        assertThat(result.get().getEmail()).isEqualTo("johnsmith@mail.com");
     }
 
     @Test
     void saveAndFindDepartmentTest() {
-        Employee employee = new Employee("Jane Smith");
+        Employee employee = new Employee("Jane Smith", "janesmith@mail.com");
         responsibleDao.saveEmployee(employee);
         Department department = new Department("HR Department", employee);
         responsibleDao.saveDepartment(department);
@@ -48,7 +48,7 @@ class ResponsibleDaoTest {
 
     @Test
     void findResponsibleByIdTest() {
-        Employee employee = new Employee("Jane Smith");
+        Employee employee = new Employee("Jane Smith", "janesmith@mail.com");
         responsibleDao.saveEmployee(employee);
         Department department = new Department("HR Department", employee);
         responsibleDao.saveDepartment(department);
@@ -69,9 +69,9 @@ class ResponsibleDaoTest {
 
     @Test
     void findAllEmployeesTest() {
-        Employee firstEmployee = new Employee("John Smith");
-        Employee secondEmployee = new Employee("Jack Smith");
-        Employee thirdEmployee = new Employee("Jane Smith");
+        Employee firstEmployee = new Employee("John Smith", "johnsmith@mail.com");
+        Employee secondEmployee = new Employee("Jack Smith", "jacksmith@mail.com");
+        Employee thirdEmployee = new Employee("Jane Smith", "janesmith@mail.com");
         Department department = new Department("HR Department", thirdEmployee);
         responsibleDao.saveEmployee(firstEmployee);
         responsibleDao.saveEmployee(secondEmployee);
@@ -87,9 +87,9 @@ class ResponsibleDaoTest {
 
     @Test
     void findAllDepartmentsTest() {
-        Employee firstEmployee = new Employee("John Smith");
-        Employee secondEmployee = new Employee("Jack Smith");
-        Employee thirdEmployee = new Employee("Jane Smith");
+        Employee firstEmployee = new Employee("John Smith", "johnsmith@mail.com");
+        Employee secondEmployee = new Employee("Jack Smith", "jacksmith@mail.com");
+        Employee thirdEmployee = new Employee("Jane Smith", "janesmith@mail.com");
         Department firstDepartment = new Department("HR Department", thirdEmployee);
         Department secondDepartment = new Department("Legal Department", secondEmployee);
         Department thirdDepartment = new Department("PR Department", firstEmployee);
@@ -110,9 +110,9 @@ class ResponsibleDaoTest {
 
     @Test
     void findAllResponsibleTest() {
-        Employee firstEmployee = new Employee("John Smith");
-        Employee secondEmployee = new Employee("Jack Smith");
-        Employee thirdEmployee = new Employee("Jane Smith");
+        Employee firstEmployee = new Employee("John Smith", "johnsmith@mail.com");
+        Employee secondEmployee = new Employee("Jack Smith", "jacksmith@mail.com");
+        Employee thirdEmployee = new Employee("Jane Smith", "janesmith@mail.com");
         Department firstDepartment = new Department("HR Department", thirdEmployee);
         Department secondDepartment = new Department("Legal Department", secondEmployee);
         Department thirdDepartment = new Department("PR Department", firstEmployee);
@@ -129,5 +129,19 @@ class ResponsibleDaoTest {
         assertThat(result).hasSize(6)
                 .extracting(Responsible::getName)
                 .contains("Jane Smith", "Legal Department");
+    }
+
+    @Test
+    void findEmployeeByEmailTest() {
+        Employee firstEmployee = new Employee("John Smith", "johnsmith@mail.com");
+        Employee secondEmployee = new Employee("Jack Smith", "jacksmith@mail.com");
+        Employee thirdEmployee = new Employee("Jane Smith", "janesmith@mail.com");
+        responsibleDao.saveEmployee(firstEmployee);
+        responsibleDao.saveEmployee(secondEmployee);
+        responsibleDao.saveEmployee(thirdEmployee);
+
+        Optional<Employee> result = responsibleDao.findEmployeeByEmail("janesmith@mail.com");
+
+        assertThat(result.get().getName()).isEqualTo("Jane Smith");
     }
 }

@@ -82,4 +82,17 @@ public class ResponsibleDao {
         entityManager.close();
         return result;
     }
+
+    public Optional<Employee> findEmployeeByEmail(String email) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        Optional<Employee> result = entityManager.createQuery(
+                "select e from Employee e where e.email = :email",
+                Employee.class)
+                .setParameter("email", email)
+                .getResultList()
+                .stream()
+                .findFirst();
+        entityManager.close();
+        return result;
+    }
 }
