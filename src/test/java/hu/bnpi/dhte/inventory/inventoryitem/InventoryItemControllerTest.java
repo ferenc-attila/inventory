@@ -1,8 +1,5 @@
 package hu.bnpi.dhte.inventory.inventoryitem;
 
-import hu.bnpi.dhte.inventory.inventoryitem.InventoryItemController;
-import hu.bnpi.dhte.inventory.inventoryitem.InventoryItemService;
-import hu.bnpi.dhte.inventory.inventoryitem.ItemType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
