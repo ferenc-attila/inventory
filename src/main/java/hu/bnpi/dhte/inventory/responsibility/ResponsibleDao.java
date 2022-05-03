@@ -3,6 +3,7 @@ package hu.bnpi.dhte.inventory.responsibility;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
+import java.util.List;
 import java.util.Optional;
 
 public class ResponsibleDao {
@@ -50,5 +51,35 @@ public class ResponsibleDao {
         Responsible result = entityManager.find(Responsible.class, id);
         entityManager.close();
         return Optional.ofNullable(result);
+    }
+
+    public List<Employee> findAllEmployees() {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        List<Employee> result = entityManager.createQuery(
+                "select e from Employee e",
+                Employee.class)
+                .getResultList();
+        entityManager.close();
+        return result;
+    }
+
+    public List<Department> findAllDepartments() {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        List<Department> result = entityManager.createQuery(
+                "select d from Department d",
+                Department.class)
+                .getResultList();
+        entityManager.close();
+        return result;
+    }
+
+    public List<Responsible> findAllResponsible() {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        List<Responsible> result = entityManager.createQuery(
+                "select r from Responsible r",
+                Responsible.class)
+                .getResultList();
+        entityManager.close();
+        return result;
     }
 }
