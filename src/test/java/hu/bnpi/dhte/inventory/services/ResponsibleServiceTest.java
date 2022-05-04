@@ -1,5 +1,8 @@
-package hu.bnpi.dhte.inventory.responsibility;
+package hu.bnpi.dhte.inventory.services;
 
+import hu.bnpi.dhte.inventory.entities.responsibility.Employee;
+import hu.bnpi.dhte.inventory.repositories.ResponsibleDao;
+import hu.bnpi.dhte.inventory.services.ResponsibleService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

@@ -1,6 +1,6 @@
-package hu.bnpi.dhte.inventory.responsibility;
+package hu.bnpi.dhte.inventory.entities.responsibility;
 
-import hu.bnpi.dhte.inventory.inventoryitem.InventoryItem;
+import hu.bnpi.dhte.inventory.entities.inventoryitem.InventoryItem;
 import jakarta.persistence.*;
 
 import java.util.Set;

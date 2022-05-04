@@ -1,10 +1,10 @@
-package hu.bnpi.dhte.inventory.responsibility;
+package hu.bnpi.dhte.inventory.entities.responsibility;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
 
 @Entity
-public class Department extends Responsible{
+public class Department extends Responsible {
 
     @OneToOne(optional = false)
     private Employee leader;

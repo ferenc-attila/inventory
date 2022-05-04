@@ -1,4 +1,4 @@
-package hu.bnpi.dhte.inventory.responsibility;
+package hu.bnpi.dhte.inventory.entities.responsibility;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

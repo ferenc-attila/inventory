@@ -1,4 +1,9 @@
-package hu.bnpi.dhte.inventory.inventoryitem;
+package hu.bnpi.dhte.inventory.services;
+
+import hu.bnpi.dhte.inventory.entities.inventoryitem.InventoryItem;
+import hu.bnpi.dhte.inventory.entities.inventoryitem.ItemType;
+import hu.bnpi.dhte.inventory.repositories.InventoryItemDao;
+import hu.bnpi.dhte.inventory.repositories.UpdateStringAttribute;
 
 import java.util.Arrays;
 import java.util.List;

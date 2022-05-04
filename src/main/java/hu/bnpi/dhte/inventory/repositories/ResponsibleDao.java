@@ -1,5 +1,8 @@
-package hu.bnpi.dhte.inventory.responsibility;
+package hu.bnpi.dhte.inventory.repositories;
 
+import hu.bnpi.dhte.inventory.entities.responsibility.Department;
+import hu.bnpi.dhte.inventory.entities.responsibility.Employee;
+import hu.bnpi.dhte.inventory.entities.responsibility.Responsible;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 

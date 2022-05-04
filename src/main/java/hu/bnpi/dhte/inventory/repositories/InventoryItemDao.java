@@ -1,5 +1,7 @@
-package hu.bnpi.dhte.inventory.inventoryitem;
+package hu.bnpi.dhte.inventory.repositories;
 
+import hu.bnpi.dhte.inventory.entities.inventoryitem.InventoryItem;
+import hu.bnpi.dhte.inventory.entities.inventoryitem.ItemType;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 

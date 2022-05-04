@@ -1,5 +1,9 @@
-package hu.bnpi.dhte.inventory.responsibility;
+package hu.bnpi.dhte.inventory.repositories;
 
+import hu.bnpi.dhte.inventory.entities.responsibility.Department;
+import hu.bnpi.dhte.inventory.entities.responsibility.Employee;
+import hu.bnpi.dhte.inventory.entities.responsibility.Responsible;
+import hu.bnpi.dhte.inventory.repositories.ResponsibleDao;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import org.junit.jupiter.api.BeforeEach;
