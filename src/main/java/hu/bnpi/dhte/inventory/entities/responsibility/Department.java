@@ -2,8 +2,10 @@ package hu.bnpi.dhte.inventory.entities.responsibility;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "departments")
 public class Department extends Responsible {
 
     @OneToOne(optional = false)

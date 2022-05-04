@@ -7,6 +7,7 @@ import java.util.Set;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@Table(name = "responsibles")
 public abstract class Responsible {
 
     @Id
@@ -16,6 +17,7 @@ public abstract class Responsible {
     private String name;
 
     @OneToMany(mappedBy = "responsible", cascade = CascadeType.PERSIST)
+    @Column(name = "inventory_items")
     private Set<InventoryItem> inventoryItems;
 
     protected Responsible() {

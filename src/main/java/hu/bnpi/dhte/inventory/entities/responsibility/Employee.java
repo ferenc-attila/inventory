@@ -1,11 +1,9 @@
 package hu.bnpi.dhte.inventory.entities.responsibility;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name = "employees")
 public class Employee extends Responsible {
 
     @Column(unique = true)
