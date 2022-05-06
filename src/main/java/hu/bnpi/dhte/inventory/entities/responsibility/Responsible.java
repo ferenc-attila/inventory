@@ -14,10 +14,10 @@ public abstract class Responsible {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "resp_name")
     private String name;
 
     @OneToMany(mappedBy = "responsible", cascade = CascadeType.PERSIST)
-    @Column(name = "inventory_items")
     private Set<InventoryItem> inventoryItems;
 
     protected Responsible() {

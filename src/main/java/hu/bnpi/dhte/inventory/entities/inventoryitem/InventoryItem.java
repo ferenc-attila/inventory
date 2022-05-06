@@ -11,14 +11,14 @@ public class InventoryItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false, length = 100)
+    @Column(name = "inventory_id", unique = true, nullable = false, length = 100)
     private String inventoryId;
 
     @Enumerated(value = EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "item_type", nullable = false)
     private ItemType itemType;
 
-    @Column(nullable = false)
+    @Column(name = "item_name", nullable = false)
     private String name;
 
     private String description;
