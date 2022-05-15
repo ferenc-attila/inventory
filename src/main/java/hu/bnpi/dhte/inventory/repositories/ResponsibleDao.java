@@ -129,4 +129,19 @@ public class ResponsibleDao {
             entityManager.close();
         }
     }
+
+    public Optional<Department> findDepartmentByName(String name) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        try {
+            return entityManager.createQuery(
+                            "select d from Department d where d.name = :name",
+                            Department.class)
+                    .setParameter("name", name)
+                    .getResultList()
+                    .stream()
+                    .findFirst();
+        } finally {
+            entityManager.close();
+        }
+    }
 }

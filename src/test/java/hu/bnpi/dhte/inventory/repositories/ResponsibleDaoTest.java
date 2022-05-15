@@ -3,7 +3,6 @@ package hu.bnpi.dhte.inventory.repositories;
 import hu.bnpi.dhte.inventory.entities.responsibility.Department;
 import hu.bnpi.dhte.inventory.entities.responsibility.Employee;
 import hu.bnpi.dhte.inventory.entities.responsibility.Responsible;
-import hu.bnpi.dhte.inventory.repositories.ResponsibleDao;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import org.junit.jupiter.api.BeforeEach;
@@ -147,5 +146,17 @@ class ResponsibleDaoTest {
         Optional<Employee> result = responsibleDao.findEmployeeByEmail("janesmith@mail.com");
 
         assertThat(result.get().getName()).isEqualTo("Jane Smith");
+    }
+
+    @Test
+    void findDepartmentByNameTest() {
+        Employee thirdEmployee = new Employee("Jane Smith", "janesmith@mail.com");
+        responsibleDao.saveEmployee(thirdEmployee);
+        Department firstDepartment = new Department("HR Department", thirdEmployee);
+        responsibleDao.saveDepartment(firstDepartment);
+
+        Optional<Department> result = responsibleDao.findDepartmentByName("HR Department");
+
+        assertThat(result.get().getLeader().getEmail()).isEqualTo("janesmith@mail.com");
     }
 }

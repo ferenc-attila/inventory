@@ -1,8 +1,8 @@
 package hu.bnpi.dhte.inventory.controllers;
 
 import hu.bnpi.dhte.inventory.entities.inventoryitem.InventoryItem;
-import hu.bnpi.dhte.inventory.services.InventoryItemService;
 import hu.bnpi.dhte.inventory.entities.inventoryitem.ItemType;
+import hu.bnpi.dhte.inventory.services.InventoryItemService;
 
 public class InventoryItemController {
 

@@ -2,8 +2,6 @@ package hu.bnpi.dhte.inventory.repositories;
 
 import hu.bnpi.dhte.inventory.entities.inventoryitem.InventoryItem;
 import hu.bnpi.dhte.inventory.entities.inventoryitem.ItemType;
-import hu.bnpi.dhte.inventory.repositories.InventoryItemDao;
-import hu.bnpi.dhte.inventory.repositories.UpdateStringAttribute;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.PersistenceException;

@@ -4,7 +4,6 @@ import hu.bnpi.dhte.inventory.entities.inventoryitem.InventoryItem;
 import hu.bnpi.dhte.inventory.entities.inventoryitem.ItemType;
 import hu.bnpi.dhte.inventory.repositories.InventoryItemDao;
 import hu.bnpi.dhte.inventory.repositories.UpdateStringAttribute;
-import hu.bnpi.dhte.inventory.services.InventoryItemService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;

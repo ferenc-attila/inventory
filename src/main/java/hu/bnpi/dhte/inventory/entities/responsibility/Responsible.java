@@ -17,7 +17,7 @@ public abstract class Responsible {
     @Column(name = "resp_name")
     private String name;
 
-    @OneToMany(mappedBy = "responsible", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "responsible")
     private Set<InventoryItem> inventoryItems;
 
     protected Responsible() {

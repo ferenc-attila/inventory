@@ -1,8 +1,8 @@
 package hu.bnpi.dhte.inventory.services;
 
+import hu.bnpi.dhte.inventory.entities.responsibility.Department;
 import hu.bnpi.dhte.inventory.entities.responsibility.Employee;
 import hu.bnpi.dhte.inventory.repositories.ResponsibleDao;
-import hu.bnpi.dhte.inventory.services.ResponsibleService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,5 +31,15 @@ class ResponsibleServiceTest {
                 .thenReturn(Optional.of(employee));
         assertThat(responsibleService.saveEmployee(employee)).isEqualTo("Employee John Smith saved successfully.");
         verify(responsibleDao).saveEmployee(employee);
+    }
+
+    @Test
+    void saveDepartmentTest() {
+        Employee employee = new Employee("John Smith", "johnsmith@mail.com");
+        Department department = new Department("HR Department", employee);
+        when(responsibleDao.saveDepartment(department))
+                .thenReturn(Optional.of(department));
+        assertThat(responsibleService.saveDepartment(department)).isEqualTo("Department HR Department saved successfully.");
+        verify(responsibleDao).saveDepartment(department);
     }
 }
